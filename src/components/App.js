@@ -4,14 +4,12 @@ import { authService } from 'fbase';
 
 function App() {
   const [init, setInit] = useState(false);
-  const [isSignIn, setisSignIn] = useState(false);
+  const [userObj, setUserObj] = useState(null);
 
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
-        setisSignIn(true);
-      } else {
-        setisSignIn(false);
+        setUserObj(user);
       }
       setInit(true);
     });
@@ -19,7 +17,11 @@ function App() {
 
   return (
     <>
-      {init ? <Router isSignIn={isSignIn} /> : 'Initializing...'}
+      {init ? (
+        <Router isSignIn={Boolean(userObj)} userObj={userObj} />
+      ) : (
+        'Initializing...'
+      )}
       <footer>&copy; {new Date().getFullYear()} Twitter-Clone</footer>
     </>
   );
