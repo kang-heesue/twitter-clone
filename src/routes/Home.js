@@ -8,7 +8,7 @@ import {
   onSnapshot,
   orderBy,
 } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import Tweet from 'components/Tweet';
 
 function Home({ userObj }) {
@@ -35,7 +35,7 @@ function Home({ userObj }) {
     let uploadURL = '';
     if (imageFile !== '') {
       const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-      const uploadFile = await uploadBytes(fileRef, imageFile, 'data_url');
+      const uploadFile = await uploadString(fileRef, imageFile, 'data_url');
       uploadURL = await getDownloadURL(uploadFile.ref);
     }
     await addDoc(collection(dbService, 'tweets'), {
