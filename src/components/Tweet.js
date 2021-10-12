@@ -51,6 +51,14 @@ function Tweet({ tweetObj, isOwner }) {
       ) : (
         <>
           <h4>{tweetObj.text}</h4>
+          {tweetObj.uploadURL && (
+            <img
+              src={tweetObj.imageURL}
+              alt="uploadImage"
+              width="50px"
+              height="50px"
+            />
+          )}
           {isOwner && (
             <>
               <button onClick={toggleEditing}>Edit</button>
