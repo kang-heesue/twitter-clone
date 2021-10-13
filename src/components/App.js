@@ -4,12 +4,25 @@ import { authService } from 'fbase';
 
 function App() {
   const [init, setInit] = useState(false);
-  const [userObj, setUserObj] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserData({
+      displayName: user.displayName,
+      uid: user.uid,
+    });
+  };
 
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
-        setUserObj(user);
+        setUserData({
+          displayName: user.displayName,
+          uid: user.uid,
+        });
+      } else {
+        setUserData(null);
       }
       setInit(true);
     });
@@ -18,7 +31,11 @@ function App() {
   return (
     <>
       {init ? (
-        <Router isSignIn={Boolean(userObj)} userObj={userObj} />
+        <Router
+          isSignIn={Boolean(userData)}
+          userData={userData}
+          refreshUser={refreshUser}
+        />
       ) : (
         'Initializing...'
       )}
