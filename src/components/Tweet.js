@@ -1,7 +1,7 @@
-import React from 'react';
-import { dbService } from 'fbase';
+import React, { useState } from 'react';
+import { dbService, storageService } from 'fbase';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { useState } from 'react/cjs/react.development';
+import { ref, deleteObject } from 'firebase/storage';
 
 function Tweet({ tweetObj, isOwner }) {
   const [editing, setEditing] = useState(false);
@@ -11,6 +11,7 @@ function Tweet({ tweetObj, isOwner }) {
     const ok = window.confirm('Are you sure you want to delete this tweet?');
     if (ok) {
       await deleteDoc(doc(dbService, `tweets/${tweetObj.id}`));
+      await deleteObject(ref(storageService, tweetObj.uploadURL));
     }
   };
 
@@ -53,7 +54,7 @@ function Tweet({ tweetObj, isOwner }) {
           <h4>{tweetObj.text}</h4>
           {tweetObj.uploadURL && (
             <img
-              src={tweetObj.imageURL}
+              src={tweetObj.uploadURL}
               alt="uploadImage"
               width="50px"
               height="50px"
