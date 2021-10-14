@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { dbService, storageService } from 'fbase';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { ref, deleteObject } from 'firebase/storage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Tweet({ tweetObj, isOwner }) {
   const [editing, setEditing] = useState(false);
@@ -34,37 +36,40 @@ function Tweet({ tweetObj, isOwner }) {
   };
 
   return (
-    <div>
+    <div className="tweet">
       {editing ? (
         <>
-          <form onSubmit={onSubmit}>
+          <form className="container tweetEdit" onSubmit={onSubmit}>
             <input
+              className="formInput"
               type="text"
               placeholder="Edit your tweet"
               value={editTweet}
               onChange={onChange}
+              autoFocus
               required
             />
-            <input type="submit" value="Update tweet" />
+            <input className="formBtn" type="submit" value="Update tweet" />
           </form>
-          <button onClick={toggleEditing}>Cancel</button>
+          <span className="formBtn cancelBtn" onClick={toggleEditing}>
+            Cancel
+          </span>
         </>
       ) : (
         <>
           <h4>{tweetObj.text}</h4>
           {tweetObj.uploadURL && (
-            <img
-              src={tweetObj.uploadURL}
-              alt="uploadImage"
-              width="50px"
-              height="50px"
-            />
+            <img src={tweetObj.uploadURL} alt="uploadImage" />
           )}
           {isOwner && (
-            <>
-              <button onClick={toggleEditing}>Edit</button>
-              <button onClick={onDeleteClick}>Delete</button>
-            </>
+            <div class="tweet_actions">
+              <span onClick={onDeleteClick}>
+                <FontAwesomeIcon icon={faTrash} />
+              </span>
+              <span onClick={toggleEditing}>
+                <FontAwesomeIcon icon={faPencilAlt} />
+              </span>
+            </div>
           )}
         </>
       )}

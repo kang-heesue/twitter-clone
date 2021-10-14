@@ -42,21 +42,32 @@ function Profile({ userData, refreshUser }) {
 
   useEffect(() => {
     getMyTweets();
-  }, []);
+  });
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
+    <div className="container">
+      <form className="profileForm" onSubmit={onSubmit}>
         <input
+          className="formInput"
           type="text"
           placeholder="Display Name"
           value={newName}
           onChange={onChange}
+          autoFocus
         />
-        <input type="submit" placeholder="Update Profile" />
+        <input
+          className="formBtn"
+          type="submit"
+          value="Update Profile"
+          style={{
+            marginTop: 10,
+          }}
+        />
       </form>
-      <button onClick={onLogoutClick}>Logout</button>
-    </>
+      <span className="formBtn cancelBtn logout" onClick={onLogoutClick}>
+        Logout
+      </span>
+    </div>
   );
 }
 

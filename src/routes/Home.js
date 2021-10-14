@@ -22,9 +22,9 @@ function Home({ userData }) {
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <TweetFactory userData={userData} />
-      <div>
+      <div style={{ marginTop: 30 }}>
         {tweets.map((tweet) => (
           <Tweet
             key={tweet.id}

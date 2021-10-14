@@ -3,12 +3,17 @@ import { v4 as uuidv4 } from 'uuid';
 import { dbService, storageService } from 'fbase';
 import { addDoc, collection } from 'firebase/firestore';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function TweetFactory({ userData }) {
   const [tweet, setTweet] = useState('');
   const [imageFile, setImageFile] = useState('');
 
   const onSubmit = async (e) => {
+    if (tweet === '') {
+      return;
+    }
     e.preventDefault();
     let uploadURL = '';
     if (imageFile !== '') {
@@ -52,20 +57,44 @@ function TweetFactory({ userData }) {
   const onClearImageFile = () => setImageFile('');
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className="factoryForm" onSubmit={onSubmit}>
+      <div className="factoryInput_container">
+        <input
+          className="factoryInput_input"
+          value={tweet}
+          onChange={onChange}
+          type="text"
+          placeholder="What's happening?"
+          maxLength={120}
+        />
+        <input type="submit" value="&rarr;" className="factoryInput_arrow" />
+      </div>
+      <label htmlFor="attach-file" className="factoryInput_label">
+        <span>Add photos</span>
+        <FontAwesomeIcon icon={faPlus} />
+      </label>
       <input
-        type="text"
-        placeholder="What's happening?"
-        value={tweet}
-        maxLength="120"
-        onChange={onChange}
+        id="attach-file"
+        type="file"
+        accept="image/*"
+        onChange={onFileChange}
+        style={{
+          opacity: 0,
+        }}
       />
-      <input type="file" accept="image/*" onChange={onFileChange} />
-      <input type="submit" value="Tweet" />
       {imageFile && (
-        <div>
-          <img src={imageFile} alt="ImageFile" width="50px" height="50px" />
-          <button onClick={onClearImageFile}>Clear</button>
+        <div className="factoryForm_image">
+          <img
+            src={imageFile}
+            alt="imageFile"
+            style={{
+              backgroundImage: imageFile,
+            }}
+          />
+          <div className="factoryForm_clear" onClick={onClearImageFile}>
+            <span>Remove</span>
+            <FontAwesomeIcon icon={faTimes} />
+          </div>
         </div>
       )}
     </form>

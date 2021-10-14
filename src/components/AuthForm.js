@@ -39,8 +39,9 @@ function AuthForm() {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form className="container" onSubmit={onSubmit}>
         <input
+          className="authInput"
           name="email"
           type="email"
           placeholder="Email"
@@ -49,6 +50,7 @@ function AuthForm() {
           onChange={onChange}
         />
         <input
+          className="authInput"
           name="password"
           type="password"
           placeholder="Password"
@@ -57,12 +59,13 @@ function AuthForm() {
           onChange={onChange}
         />
         <input
+          className="authInput authSubmit"
           type="submit"
           value={newAccount ? 'Create Account' : 'Sign In'}
         />
-        {error}
+        {error && <span className="authError">{error}</span>}
       </form>
-      <span onClick={toggleAccount}>
+      <span className="authSwitch" onClick={toggleAccount}>
         {newAccount ? 'Sign In' : 'Create Account'}
       </span>
     </>
