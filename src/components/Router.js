@@ -10,29 +10,29 @@ function Router({ isSignIn, userData, refreshUser }) {
     <HashRouter>
       {isSignIn && <Nav userData={userData} />}
       <Switch>
-        {isSignIn ? (
-          <div
-            style={{
-              maxWidth: 890,
-              width: '100%',
-              margin: '0 auto',
-              marginTop: 80,
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <Route exact path="/">
-              <Home userData={userData} />
-            </Route>
-            <Route exact path="/profile">
-              <Profile userData={userData} refreshUser={refreshUser} />
-            </Route>
-          </div>
+        {!isSignIn ? (
+          <Route exact path="/">
+            <Auth />
+          </Route>
         ) : (
           <>
-            <Route exact path="/">
-              <Auth />
-            </Route>
+            <div
+              style={{
+                maxWidth: 890,
+                width: '100%',
+                margin: '0 auto',
+                marginTop: 80,
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <Route exact path="/">
+                <Home userData={userData} />
+              </Route>
+              <Route exact path="/profile">
+                <Profile userData={userData} refreshUser={refreshUser} />
+              </Route>
+            </div>
           </>
         )}
       </Switch>

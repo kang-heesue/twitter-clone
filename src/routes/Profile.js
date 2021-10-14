@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { authService, dbService } from 'fbase';
-import { query, collection, where, orderBy, getDocs } from 'firebase/firestore';
+import { authService } from 'fbase';
 import { updateProfile } from 'firebase/auth';
 
 function Profile({ userData, refreshUser }) {
@@ -29,20 +28,6 @@ function Profile({ userData, refreshUser }) {
     authService.signOut();
     history.push('/');
   };
-
-  const getMyTweets = async () => {
-    const myTweets = query(
-      collection(dbService, 'tweets'),
-      where('creatorId', '==', userData.uid),
-      orderBy('createdAt', 'desc'),
-    );
-    const getTweets = await getDocs(myTweets);
-    console.log(getTweets.docs.map((doc) => doc.data()));
-  };
-
-  useEffect(() => {
-    getMyTweets();
-  });
 
   return (
     <div className="container">

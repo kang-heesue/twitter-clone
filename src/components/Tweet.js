@@ -21,7 +21,6 @@ function Tweet({ tweetObj, isOwner }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(tweetObj, editTweet);
     await updateDoc(doc(dbService, `tweets/${tweetObj.id}`), {
       text: editTweet,
     });
@@ -62,7 +61,7 @@ function Tweet({ tweetObj, isOwner }) {
             <img src={tweetObj.uploadURL} alt="uploadImage" />
           )}
           {isOwner && (
-            <div class="tweet_actions">
+            <div className="tweet_actions">
               <span onClick={onDeleteClick}>
                 <FontAwesomeIcon icon={faTrash} />
               </span>

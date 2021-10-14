@@ -11,10 +11,10 @@ function TweetFactory({ userData }) {
   const [imageFile, setImageFile] = useState('');
 
   const onSubmit = async (e) => {
+    e.preventDefault();
     if (tweet === '') {
       return;
     }
-    e.preventDefault();
     let uploadURL = '';
     if (imageFile !== '') {
       const fileRef = ref(storageService, `${userData.uid}/${uuidv4()}`);
@@ -69,12 +69,12 @@ function TweetFactory({ userData }) {
         />
         <input type="submit" value="&rarr;" className="factoryInput_arrow" />
       </div>
-      <label htmlFor="attach-file" className="factoryInput_label">
+      <label htmlFor="image-file" className="factoryInput_label">
         <span>Add photos</span>
         <FontAwesomeIcon icon={faPlus} />
       </label>
       <input
-        id="attach-file"
+        id="image-file"
         type="file"
         accept="image/*"
         onChange={onFileChange}
