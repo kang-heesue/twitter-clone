@@ -5,18 +5,18 @@ import Auth from 'routes/Auth';
 import Home from 'routes/Home';
 import Profile from 'routes/Profile';
 
-function Router({ isSignIn, userObj }) {
+function Router({ isSignIn, userData, refreshUser }) {
   return (
     <HashRouter>
-      {isSignIn && <Nav />}
+      {isSignIn && <Nav userData={userData} />}
       <Switch>
         {isSignIn ? (
           <>
             <Route exact path="/">
-              <Home userObj={userObj} />
+              <Home userData={userData} />
             </Route>
             <Route exact path="/profile">
-              <Profile />
+              <Profile userData={userData} refreshUser={refreshUser} />
             </Route>
           </>
         ) : (

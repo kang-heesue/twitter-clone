@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { dbService, storageService } from 'fbase';
-import {
-  addDoc,
-  query,
-  collection,
-  onSnapshot,
-  orderBy,
-} from 'firebase/firestore';
-import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { dbService } from 'fbase';
+import { query, collection, onSnapshot, orderBy } from 'firebase/firestore';
 import Tweet from 'components/Tweet';
+import TweetFactory from 'components/TweetFactory';
 
-function Home({ userObj }) {
-  const [tweet, setTweet] = useState('');
+function Home({ userData }) {
   const [tweets, setTweets] = useState([]);
-  const [imageFile, setImageFile] = useState('');
 
   useEffect(() => {
     const dbTweets = query(
@@ -30,74 +21,15 @@ function Home({ userObj }) {
     });
   }, []);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    let uploadURL = '';
-    if (imageFile !== '') {
-      const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-      const uploadFile = await uploadString(fileRef, imageFile, 'data_url');
-      uploadURL = await getDownloadURL(uploadFile.ref);
-    }
-    await addDoc(collection(dbService, 'tweets'), {
-      text: tweet,
-      createdAt: Date.now(),
-      creatorId: userObj.uid,
-      uploadURL,
-    });
-    setTweet('');
-    setImageFile('');
-  };
-
-  const onChange = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setTweet(value);
-  };
-
-  const onFileChange = (e) => {
-    const {
-      target: { files },
-    } = e;
-
-    const file = files[0];
-    const reader = new FileReader();
-    reader.onloadend = (finishedEvent) => {
-      const {
-        currentTarget: { result },
-      } = finishedEvent;
-      setImageFile(result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const onClearImageFile = () => setImageFile('');
-
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          placeholder="What's happening?"
-          value={tweet}
-          maxLength="120"
-          onChange={onChange}
-        />
-        <input type="file" accept="image/*" onChange={onFileChange} />
-        <input type="submit" value="Tweet" />
-        {imageFile && (
-          <div>
-            <img src={imageFile} alt="ImageFile" width="50px" height="50px" />
-            <button onClick={onClearImageFile}>Clear</button>
-          </div>
-        )}
-      </form>
+      <TweetFactory userData={userData} />
       <div>
         {tweets.map((tweet) => (
           <Tweet
             key={tweet.id}
             tweetObj={tweet}
-            isOwner={tweet.creatorId === userObj.uid}
+            isOwner={tweet.creatorId === userData.uid}
           />
         ))}
       </div>
